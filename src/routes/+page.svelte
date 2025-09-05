@@ -1,2 +1,17 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import Input from '$lib/components/TaskInput.svelte';
+
+	function addTask(newTask: string) {
+		console.log(newTask);
+	}
+</script>
+
+<main>
+	<Input {addTask} />
+</main>
+
+<style>
+	main {
+		background-color: aliceblue;
+	}
+</style>
