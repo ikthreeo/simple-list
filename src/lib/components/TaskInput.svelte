@@ -1,19 +1,18 @@
 <script lang="ts">
-	let newTask = $state('');
-	let {
-		addTask
-	}: {
-		addTask: (newTask: string) => void;
-	} = $props();
+	import { addTask } from '$lib/stores/taskStore';
 
-	function formSubmitted(e: SubmitEvent) {
+	let inputValue = $state<string>('');
+
+	function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
+		addTask(inputValue);
+		inputValue = '';
 	}
 </script>
 
-<form onsubmit={formSubmitted}>
+<form onsubmit={handleSubmit}>
 	<label for="task-input"></label>
-	<input type="text" name="task-input" id="task-input" bind:value={newTask} />
+	<input type="text" name="task-input" id="task-input" bind:value={inputValue} />
 	<button>Add</button>
 </form>
 

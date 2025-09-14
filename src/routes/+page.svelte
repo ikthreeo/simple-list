@@ -1,17 +1,13 @@
 <script lang="ts">
-	import Input from '$lib/components/TaskInput.svelte';
-
-	function addTask(newTask: string) {
-		console.log(newTask);
-	}
+	import TaskInput from '$lib/components/TaskInput.svelte';
+	import TaskList from '$lib/components/TaskList.svelte';
 </script>
 
 <main>
-	<Input {addTask} />
+	<TaskList />
+
+	<TaskInput />
 </main>
 
 <style>
-	main {
-		background-color: aliceblue;
-	}
 </style>
