@@ -35,7 +35,7 @@ You can preview the production build with `npm run preview`.
 📋 Core Task Functionality
 
  - [ ] Create Task data model/schema
- - [ ] Set up state management with Svelte 5 runes
+ - [x] Set up state management with Svelte 5 runes
  - [ ] Build TaskItem component
  - [ ] Build TaskList container component
  - [ ] Build TaskForm for adding Tasks
@@ -44,10 +44,10 @@ You can preview the production build with `npm run preview`.
 
 ✏️ CRUD Operations
 
- - [ ] Create: Add new Tasks
- - [ ] Read: Display Tasks in list
+ - [x] Create: Add new Tasks
+ - [x] Read: Display Tasks in list
  - [ ] Update: Edit existing Tasks
- - [ ] Delete: Remove Tasks with confirmation
+ - [x] Delete: Remove Tasks
 
 ⌨️ Keyboard Navigation
 

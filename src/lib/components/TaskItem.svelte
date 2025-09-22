@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { toggleDone, removeTask } from '$lib/stores/taskStore';
+	import { removeTask, toggleDone, togglePriority } from '$lib/stores/taskStore';
 	import type { Task } from '$lib/types';
 
 	let {
@@ -9,7 +9,7 @@
 	} = $props();
 </script>
 
-<li>
+<li class={task.done ? 'complete' : ''}>
 	<input
 		type="checkbox"
 		name="done"
@@ -18,7 +18,11 @@
 	/>
 	<span>{task.body}</span>
 	<div class="btn-group">
-		<button class="btn-task" aria-label="Change Priority">❗️</button>
+		<button
+			class={['btn-task', task.priority]}
+			aria-label="Change Priority"
+			onclick={() => togglePriority(task.id)}>❗️</button
+		>
 		<button class="btn-task" aria-label="Delete task" onclick={() => removeTask(task.id)}>🗑️</button
 		>
 	</div>
@@ -28,5 +32,21 @@
 	li {
 		display: flex;
 		gap: 4px;
+	}
+
+	.complete {
+		text-decoration: line-through;
+	}
+
+	.btn-task.low {
+		background-color: white;
+	}
+
+	.btn-task.normal {
+		background-color: yellow;
+	}
+
+	.btn-task.high {
+		background-color: red;
 	}
 </style>

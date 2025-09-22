@@ -16,6 +16,22 @@ export const addTask = (body: string) => {
     });
 }
 
+export const removeTask = (id: string) => {
+    tasks.update(tasks =>
+        tasks.filter(task =>
+            task.id != id
+        )
+    );
+}
+
+export const deleteDone = () => {
+    tasks.update(tasks =>
+        tasks.filter(task =>
+            !task.done
+        )
+    );
+}
+
 export const toggleDone = (id: string) => {
     tasks.update(tasks =>
         tasks.map(task =>
@@ -24,10 +40,22 @@ export const toggleDone = (id: string) => {
     );
 }
 
-export const removeTask = (id: string) => {
+export const togglePriority = (id: string) => {
     tasks.update(tasks =>
-        tasks.filter(task =>
-            task.id != id
-        )
+        tasks.map(task => {
+            if (task.id === id) {
+
+                switch (task.priority) {
+                    case 'low':
+                        return { ...task, priority: 'normal' }
+                    case 'normal':
+                        return { ...task, priority: 'high' }
+                    case 'high':
+                        return { ...task, priority: 'low' }
+                }
+            } else {
+                return task
+            }
+        })
     );
 }

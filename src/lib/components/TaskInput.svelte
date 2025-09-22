@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { addTask } from '$lib/stores/taskStore';
+	import { onMount } from 'svelte';
 
 	let inputValue = $state<string>('');
 
@@ -8,6 +9,13 @@
 		addTask(inputValue);
 		inputValue = '';
 	}
+
+	onMount(() => {
+		const test_list: string[] = ['I am a test task', 'Oh another test task', 'Random third task'];
+		for (const task of test_list) {
+			addTask(task);
+		}
+	});
 </script>
 
 <form onsubmit={handleSubmit}>
