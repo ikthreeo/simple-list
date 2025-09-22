@@ -18,14 +18,14 @@
 
 <style>
 	.list-block {
-		width: 60%;
+		width: clamp(750px, 60vw, 70%);
 	}
 
-	@media (max-width: 768px) {
+	/* @media (max-width: 768px) {
 		.list-block {
 			width: min(90%, 650px);
 		}
-	}
+	} */
 
 	@media (max-width: 480px) {
 		.list-block {

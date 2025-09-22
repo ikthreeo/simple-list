@@ -12,4 +12,13 @@
 </ul>
 
 <style>
+	ul {
+		padding: 0;
+	}
+
+	article {
+		margin-bottom: 1.5rem;
+		background-color: var(--task-bg);
+		color: var(--text01);
+	}
 </style>

@@ -7,6 +7,8 @@
 :root {
     /* COLORS */
     --bg: light-dark(#E5EDEF, #192B73);
+    --bw: light-dark(hsl(0, 0%, 0%), hsl(0, 0%, 100%));
+    --task-bg: light-dark(hsla(0, 0%, 96%, 0.7), hsl(236, 66%, 20%, 0.6));
     --text01: light-dark(#0D114F, #FEF8AA);
     --text02: light-dark(#2b3075, #e6e4c5);
     --accent01: light-dark(#1AE4FF, #F6E626);
