@@ -5,18 +5,19 @@
 
 <ul>
 	{#each $tasks as task (task.id)}
-		<article>
+		<li>
 			<TaskItem {task} />
-		</article>
+		</li>
 	{/each}
 </ul>
 
 <style>
 	ul {
 		padding: 0;
+		list-style-type: none;
 	}
 
-	article {
+	li {
 		margin-bottom: 1.5rem;
 		background-color: var(--task-bg);
 		color: var(--text01);

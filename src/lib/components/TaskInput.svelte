@@ -5,25 +5,25 @@
 	let inputValue = $state<string>('');
 
 	function handleSubmit(e: SubmitEvent) {
-		if (inputValue) {
-			e.preventDefault();
+		e.preventDefault();
+		const trimmed = inputValue.trim();
+		if (trimmed) {
 			addTask(inputValue);
 			inputValue = '';
-		} else {
-			return false;
 		}
 	}
 
-	onMount(() => {
-		const test_list: string[] = ['I am a test task', 'Oh another test task', 'Random third task'];
-		for (const task of test_list) {
-			addTask(task);
-		}
-	});
+	if (import.meta.env.DEV) {
+		onMount(() => {
+			const test_list: string[] = ['I am a test task', 'Oh another test task', 'Random third task'];
+			for (const task of test_list) {
+				addTask(task);
+			}
+		});
+	}
 </script>
 
 <form onsubmit={handleSubmit}>
-	<label for="task-input"></label>
 	<input
 		type="text"
 		name="task-input"

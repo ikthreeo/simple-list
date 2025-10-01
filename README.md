@@ -25,8 +25,9 @@ You can preview the production build with `npm run preview`.
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
 
 ## TO-DO List
-- Save on enter
-- Auto save on clicking out
+- Local Storage
+- Accesibility shortcuts (Row model)
+
 
 ### Future
 - Clean List button state for "No done tasks"

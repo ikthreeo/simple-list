@@ -11,11 +11,18 @@
 	} = $props();
 
 	let editing: boolean = $state(false);
-	let newBody: string = $state(task.body);
+	let editValue: string = $state('');
+	$inspect(editValue);
 
 	async function saveEdit() {
+		const trimmed = editValue.trim();
+		if (!trimmed) {
+			alert('Task cannot be empty');
+			return;
+		}
+
 		try {
-			await updateBody(task.id, newBody.trim());
+			await updateBody(task.id, trimmed);
 			editing = false;
 		} catch (e) {
 			alert(`Failed to update task:, ${e}`);
@@ -23,17 +30,18 @@
 	}
 
 	function startEdit() {
+		editValue = task.body;
 		editing = true;
 	}
 
 	function cancelEdit() {
 		editing = false;
+		editValue = '';
 	}
 </script>
 
-<li
-	tabindex="0"
-	class={task.done ? 'complete' : ''}
+<div
+	class={['item-wrap', task.done ? 'complete' : '']}
 	role="listitem"
 	aria-label={`Task: ${task.body}`}
 >
@@ -47,7 +55,7 @@
 		/>
 	</label>
 	{#if !editing}
-		<button class="body" onclick={() => startEdit()}>{task.body}</button>
+		<button class="body" onclick={startEdit}>{task.body}</button>
 		<div class="btn-group">
 			<button
 				class={['btn-task', task.priority]}
@@ -80,30 +88,30 @@
 			name="task-input"
 			id="task-input"
 			{@attach autofocus}
-			onblur={() => saveEdit()}
+			onblur={saveEdit}
 			onkeydown={(e) => {
 				if (e.key === 'Enter') saveEdit();
 				if (e.key === 'Escape') cancelEdit();
 			}}
-			bind:value={newBody}
+			bind:value={editValue}
 		/>
 		<div class="btn-group">
-			<button class="btn-task" aria-label="save" onclick={() => saveEdit()}>
+			<button class="btn-task" aria-label="save" onclick={saveEdit}>
 				<span>
 					{@html icons['checkmark']}
 				</span>
 			</button>
-			<button class="btn-task alert" aria-label="save" onclick={() => cancelEdit()}>
+			<button class="btn-task alert" aria-label="save" onclick={cancelEdit}>
 				<span>
 					{@html icons['close']}
 				</span>
 			</button>
 		</div>
 	{/if}
-</li>
+</div>
 
 <style>
-	li {
+	.item-wrap {
 		position: relative;
 		display: flex;
 		align-items: stretch;
@@ -185,7 +193,7 @@
 		transition: width 50ms ease-in-out;
 	}
 
-	li:hover {
+	.item-wrap:hover {
 		.input-wrap {
 			width: 1.5rem;
 		}

@@ -1,6 +1,12 @@
 import { writable } from "svelte/store";
 import type { Task } from '$lib/types'
 
+const priorityOrder: Record<Task['priority'], Task['priority']> = {
+    low: 'normal',
+    normal: 'high',
+    high: 'low'
+};
+
 export const tasks = writable<Task[]>([]);
 
 export const addTask = (body: string) => {
@@ -22,9 +28,7 @@ export const updateBody = (id: string, newBody: string) => {
     tasks.update(list =>
         list.map(task =>
             task.id === id
-                ? task.body === newBody
-                    ? task
-                    : { ...task, body: newBody }
+                ? { ...task, body: newBody }
                 : task
         )
     );
@@ -56,20 +60,10 @@ export const toggleDone = (id: string) => {
 
 export const togglePriority = (id: string) => {
     tasks.update(list =>
-        list.map(task => {
-            if (task.id === id) {
-
-                switch (task.priority) {
-                    case 'low':
-                        return { ...task, priority: 'normal' }
-                    case 'normal':
-                        return { ...task, priority: 'high' }
-                    case 'high':
-                        return { ...task, priority: 'low' }
-                }
-            } else {
-                return task
-            }
-        })
+        list.map(task =>
+            task.id === id
+                ? { ...task, priority: priorityOrder[task.priority] }
+                : task
+        )
     );
 }
