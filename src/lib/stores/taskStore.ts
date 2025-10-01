@@ -23,7 +23,7 @@ export const addTask = (body: string) => {
 }
 
 export const updateBody = (id: string, newBody: string) => {
-    if (!newBody) throw Error('Empty');
+    if (!newBody) removeTask(id);
 
     tasks.update(list =>
         list.map(task =>

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { tasks, deleteDone } from '$lib/stores/taskStore';
+	$: clearToggle = $tasks.some((t) => t.done);
 </script>
 
 <div class="clear">
-	{#if $tasks.some((t) => t.done)}
+	{#if clearToggle}
 		<hr class="h-line" />
-		<button class="btn-clear" onclick={() => deleteDone()}>Clear</button>
+		<button class="btn-clear" onclick={deleteDone} disabled={!clearToggle}>Clear</button>
 	{/if}
 </div>
 

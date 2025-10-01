@@ -8,7 +8,7 @@
 		e.preventDefault();
 		const trimmed = inputValue.trim();
 		if (trimmed) {
-			addTask(inputValue);
+			addTask(trimmed);
 			inputValue = '';
 		}
 	}

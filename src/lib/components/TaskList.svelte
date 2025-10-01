@@ -3,9 +3,9 @@
 	import TaskItem from '$lib/components/TaskItem.svelte';
 </script>
 
-<ul>
+<ul role="list">
 	{#each $tasks as task (task.id)}
-		<li>
+		<li aria-label={`Task: ${task.body}`}>
 			<TaskItem {task} />
 		</li>
 	{/each}

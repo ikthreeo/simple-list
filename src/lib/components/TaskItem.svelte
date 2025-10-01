@@ -11,6 +11,7 @@
 	} = $props();
 
 	let editing: boolean = $state(false);
+	let cancelled: boolean = $state(false);
 	let editValue: string = $state('');
 	$inspect(editValue);
 
@@ -35,16 +36,21 @@
 	}
 
 	function cancelEdit() {
+		cancelled = true;
 		editing = false;
-		editValue = '';
+		editValue = task.body;
+	}
+
+	function autoSave() {
+		if (cancelled) {
+			cancelled = false;
+		} else {
+			saveEdit();
+		}
 	}
 </script>
 
-<div
-	class={['item-wrap', task.done ? 'complete' : '']}
-	role="listitem"
-	aria-label={`Task: ${task.body}`}
->
+<div class={['item-wrap', task.done ? 'complete' : '']}>
 	<label class="input-wrap">
 		<input
 			class="checkbox"
@@ -55,7 +61,7 @@
 		/>
 	</label>
 	{#if !editing}
-		<button class="body" onclick={startEdit}>{task.body}</button>
+		<button class="body" aria-label="Edit Task" onclick={startEdit}>{task.body}</button>
 		<div class="btn-group">
 			<button
 				class={['btn-task', task.priority]}
@@ -86,9 +92,8 @@
 			class="body"
 			type="text"
 			name="task-input"
-			id="task-input"
 			{@attach autofocus}
-			onblur={saveEdit}
+			onblur={autoSave}
 			onkeydown={(e) => {
 				if (e.key === 'Enter') saveEdit();
 				if (e.key === 'Escape') cancelEdit();
@@ -101,7 +106,13 @@
 					{@html icons['checkmark']}
 				</span>
 			</button>
-			<button class="btn-task alert" aria-label="save" onclick={cancelEdit}>
+			<button
+				type="button"
+				class="btn-task alert"
+				aria-label="cancel"
+				onpointerdown={() => (cancelled = true)}
+				onclick={cancelEdit}
+			>
 				<span>
 					{@html icons['close']}
 				</span>

@@ -30,5 +30,5 @@ You can preview the production build with `npm run preview`.
 
 
 ### Future
-- Clean List button state for "No done tasks"
-- 
+- Reorder list - drag and drop
+- Max char length with counter near end
