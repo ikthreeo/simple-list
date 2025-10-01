@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { icons } from '$lib/assets/icons';
 
 	type Theme = 'light' | 'dark';
 	let theme: Theme = 'dark';
@@ -35,7 +36,11 @@
 				aria-label={theme === 'light' ? 'light mode' : 'dark mode'}
 				onclick={toggleTheme}
 			>
-				{theme === 'light' ? '☀️' : '🌕'}
+				{#if theme === 'light'}
+					{@html icons['sun']}
+				{:else}
+					{@html icons['moon']}
+				{/if}
 			</button>
 		</div>
 	</div>
@@ -60,8 +65,10 @@
 	}
 
 	.btn-theme {
+		width: 2rem;
+		height: 2rem;
+		padding: 0.25rem;
 		color: #fff;
-		font-size: 2rem;
 		background-color: transparent;
 		border: none;
 		cursor: pointer;

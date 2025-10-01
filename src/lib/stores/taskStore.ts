@@ -4,45 +4,59 @@ import type { Task } from '$lib/types'
 export const tasks = writable<Task[]>([]);
 
 export const addTask = (body: string) => {
-    tasks.update(tasks => {
+    tasks.update(list => {
         const newTask: Task = {
             id: crypto.randomUUID(),
             body,
             done: false,
             priority: 'low',
-            position: tasks.length
+            position: list.length
         };
-        return [...tasks, newTask]
+        return [...list, newTask]
     });
 }
 
+export const updateBody = (id: string, newBody: string) => {
+    if (!newBody) throw Error('Empty');
+
+    tasks.update(list =>
+        list.map(task =>
+            task.id === id
+                ? task.body === newBody
+                    ? task
+                    : { ...task, body: newBody }
+                : task
+        )
+    );
+}
+
 export const removeTask = (id: string) => {
-    tasks.update(tasks =>
-        tasks.filter(task =>
+    tasks.update(list =>
+        list.filter(task =>
             task.id != id
         )
     );
 }
 
 export const deleteDone = () => {
-    tasks.update(tasks =>
-        tasks.filter(task =>
+    tasks.update(list =>
+        list.filter(task =>
             !task.done
         )
     );
 }
 
 export const toggleDone = (id: string) => {
-    tasks.update(tasks =>
-        tasks.map(task =>
+    tasks.update(list =>
+        list.map(task =>
             task.id === id ? { ...task, done: !task.done } : task
         )
     );
 }
 
 export const togglePriority = (id: string) => {
-    tasks.update(tasks =>
-        tasks.map(task => {
+    tasks.update(list =>
+        list.map(task => {
             if (task.id === id) {
 
                 switch (task.priority) {

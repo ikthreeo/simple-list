@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { removeTask, toggleDone, togglePriority } from '$lib/stores/taskStore';
+	import { removeTask, toggleDone, togglePriority, updateBody } from '$lib/stores/taskStore';
 	import type { Task } from '$lib/types';
 	import { icons } from '$lib/assets/icons';
 
@@ -8,39 +8,76 @@
 	}: {
 		task: Task;
 	} = $props();
+
+	let editing: boolean = $state(false);
+	let newBody: string = $state(task.body);
+
+	async function saveEdit() {
+		try {
+			await updateBody(task.id, newBody.trim());
+			editing = false;
+		} catch (e) {
+			alert(`Failed to update task:, ${e}`);
+		}
+	}
+
+	function cancelEdit() {
+		editing = false;
+	}
 </script>
 
 <li class={task.done ? 'complete' : ''}>
 	<label class="input-wrap">
 		<input
+			class="checkbox"
 			type="checkbox"
 			name="completed"
 			checked={task.done ? true : false}
 			onchange={() => toggleDone(task.id)}
 		/>
 	</label>
-	<span class="body">{task.body}</span>
-	<div class="btn-group">
-		<button
-			class={['btn-task', task.priority]}
-			aria-label="Change Priority"
-			onclick={() => togglePriority(task.id)}
-			><span>
-				{#if task.priority === 'low'}
-					{@html icons['alert']}
-				{:else if task.priority === 'normal'}
-					{@html icons['alert-double']}
-				{:else}
-					{@html icons['alert-triple']}
-				{/if}
-			</span>
-		</button>
-		<button class="btn-task trash" aria-label="Delete task" onclick={() => removeTask(task.id)}>
-			<span>
-				{@html icons['trash']}
-			</span>
-		</button>
-	</div>
+	{#if !editing}
+		<button class="body" onclick={() => (editing = true)}>{task.body}</button>
+		<div class="btn-group">
+			<button
+				class={['btn-task', task.priority]}
+				aria-label="Change Priority"
+				onclick={() => togglePriority(task.id)}
+				><span>
+					{#if task.priority === 'low'}
+						{@html icons['alert']}
+					{:else if task.priority === 'normal'}
+						{@html icons['alert-double']}
+					{:else}
+						{@html icons['alert-triple']}
+					{/if}
+				</span>
+			</button>
+			<button
+				class="btn-task trash alert"
+				aria-label="Delete task"
+				onclick={() => removeTask(task.id)}
+			>
+				<span>
+					{@html icons['trash']}
+				</span>
+			</button>
+		</div>
+	{:else}
+		<input class="body" type="text" name="task-input" id="task-input" bind:value={newBody} />
+		<div class="btn-group">
+			<button class="btn-task" aria-label="save" onclick={() => saveEdit()}>
+				<span>
+					{@html icons['checkmark']}
+				</span>
+			</button>
+			<button class="btn-task alert" aria-label="save" onclick={() => cancelEdit()}>
+				<span>
+					{@html icons['close']}
+				</span>
+			</button>
+		</div>
+	{/if}
 </li>
 
 <style>
@@ -55,6 +92,9 @@
 	.body {
 		flex-grow: 1;
 		font-size: 1.25rem;
+		color: var(--text01);
+		cursor: text;
+		text-align: left;
 	}
 
 	.input-wrap {
@@ -70,7 +110,7 @@
 		transition: width 50ms ease-in-out;
 	}
 
-	input {
+	.checkbox {
 		width: 0rem;
 		height: 1rem;
 		transition: width 30ms ease-in-out;
@@ -114,7 +154,7 @@
 		color: hsl(19, 100%, 65%);
 	}
 
-	.btn-task.trash {
+	.btn-task.alert {
 		color: hsl(2, 100%, 66%);
 	}
 
@@ -128,7 +168,7 @@
 			width: 1.5rem;
 		}
 
-		input {
+		.checkbox {
 			width: 1rem;
 		}
 
