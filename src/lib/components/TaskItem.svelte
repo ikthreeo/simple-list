@@ -2,6 +2,7 @@
 	import { removeTask, toggleDone, togglePriority, updateBody } from '$lib/stores/taskStore';
 	import type { Task } from '$lib/types';
 	import { icons } from '$lib/assets/icons';
+	import { autofocus } from '$lib/actions/autofocus';
 
 	let {
 		task
@@ -21,23 +22,32 @@
 		}
 	}
 
+	function startEdit() {
+		editing = true;
+	}
+
 	function cancelEdit() {
 		editing = false;
 	}
 </script>
 
-<li class={task.done ? 'complete' : ''}>
+<li
+	tabindex="0"
+	class={task.done ? 'complete' : ''}
+	role="listitem"
+	aria-label={`Task: ${task.body}`}
+>
 	<label class="input-wrap">
 		<input
 			class="checkbox"
 			type="checkbox"
 			name="completed"
-			checked={task.done ? true : false}
+			checked={task.done}
 			onchange={() => toggleDone(task.id)}
 		/>
 	</label>
 	{#if !editing}
-		<button class="body" onclick={() => (editing = true)}>{task.body}</button>
+		<button class="body" onclick={() => startEdit()}>{task.body}</button>
 		<div class="btn-group">
 			<button
 				class={['btn-task', task.priority]}
@@ -64,7 +74,19 @@
 			</button>
 		</div>
 	{:else}
-		<input class="body" type="text" name="task-input" id="task-input" bind:value={newBody} />
+		<input
+			class="body"
+			type="text"
+			name="task-input"
+			id="task-input"
+			{@attach autofocus}
+			onblur={() => saveEdit()}
+			onkeydown={(e) => {
+				if (e.key === 'Enter') saveEdit();
+				if (e.key === 'Escape') cancelEdit();
+			}}
+			bind:value={newBody}
+		/>
 		<div class="btn-group">
 			<button class="btn-task" aria-label="save" onclick={() => saveEdit()}>
 				<span>
